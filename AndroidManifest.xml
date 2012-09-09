@@ -18,7 +18,7 @@
             android:label="@string/title_activity_main" 
             android:screenOrientation="landscape"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="adjustResize"
             android:immersive="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
