@@ -35,31 +35,37 @@ public class MainActivity extends Activity {
         webView.setWebViewClient(new WebViewClient() {
 
         	   public void onPageFinished(WebView view, String url) {
-        		   
+         		   
         		   Log.d("scale", view.getScale() + "");
-        	    
+      	    
         	   }
         	   
         	   public void onScaleChanged (WebView view, float oldScale, float newScale){
         		   
         		   Log.d("scale changed", oldScale + " - " + newScale);
         		   
+        		   if(newScale > 0.7){
+        		   
+        		   		Log.d("scale","reset");
+        				//view.setInitialScale(70);
+  			   
+        		   }
+        		   
         	   }
         
         });
         
-        webView.setInitialScale(100);
-        webView.setMapTrackballToArrowKeys(true);
+        webView.setInitialScale(70);
+       
         webView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
         webView.setVerticalScrollBarEnabled(false);
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
         
-        webSettings.setDefaultZoom(ZoomDensity.FAR);
-        webSettings.setUseWideViewPort(true);
-        webSettings.setLoadWithOverviewMode(true);
-        
-        webSettings.setSupportZoom(true);        
+        webSettings.setBuiltInZoomControls(false);
+        webSettings.setSupportZoom(false);
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webSettings.setPluginState(WebSettings.PluginState.ON);
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setDatabaseEnabled(true); 
@@ -69,7 +75,6 @@ public class MainActivity extends Activity {
         webSettings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
         webSettings.setUserAgentString("Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.77 Large Screen Safari/534.24 GoogleTV");
 
-        
         webView.loadUrl("file:///android_asset/www/index.html");
     
         
