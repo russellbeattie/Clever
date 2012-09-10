@@ -1,7 +1,9 @@
 package io.clever;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
@@ -155,8 +157,9 @@ public class MainActivity extends Activity {
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
         
-        webSettings.setBuiltInZoomControls(false);
-        webSettings.setSupportZoom(false);
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
+        webSettings.setSupportZoom(true);
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         webSettings.setPluginState(WebSettings.PluginState.ON);
         webSettings.setJavaScriptEnabled(true);
@@ -169,7 +172,19 @@ public class MainActivity extends Activity {
         webSettings.setRenderPriority( RenderPriority.HIGH);
         webSettings.setUserAgentString("Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.77 Large Screen Safari/534.24 GoogleTV");
 
-        webView.loadUrl(HOME_PAGE);
+        final Intent intent = getIntent();
+        if ((intent.getAction() == Intent.ACTION_VIEW) && (intent.getData() != null))
+        {
+        	final String url = intent.getDataString();
+        	urlField.setText(url);
+        	webView.loadUrl(url);
+        	navbar.setVisibility(View.GONE);
+        }
+        else
+        {
+        	webView.loadUrl(HOME_PAGE);
+        }
+        
         webView.requestFocus();
     }
     
