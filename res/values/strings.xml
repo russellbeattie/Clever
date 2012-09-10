@@ -3,4 +3,7 @@
     <string name="app_name">Clever</string>
     <string name="title_activity_main">Clever</string>
     
+	<string name="go_button">Go</string>
+    
+    
 </resources>

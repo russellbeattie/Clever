@@ -9,27 +9,7 @@
 
 			body{
 				background-color: #000;
-				color: #fff;
-				text-align: center;
-				font-family: sans-serif;
 			}
-			
-			.wrapper{
-				margin: 150px auto;
-				display: inline-block;
-				max-width: 100%;
-			}
-			input{
-				width: 600px;
-				max-width: 100%;
-			}
-			input, button{
-				font-size: 30px;
-				border: 3px solid #333;
-				border-radius: 10px;
-				padding: 20px;
-			}
-			
 			.logo{
 				position: absolute;
 				bottom: 20px;
@@ -39,62 +19,11 @@
 			}
 		
 		</style>
-		
-		<script>
-				
-			window.onload = function(){
-							
-				var loc = document.getElementById('loc');
-				var url = document.getElementById('url');
-				
-				
-				var prevUrl = localStorage.getItem('url');
-				
-				if(prevUrl){
-					url.value = prevUrl;
-				}
-				
-				url.onclick = function(){
-					
-				    this.select();	
-				
-				}
-				
-				
-				loc.onsubmit = function(e){
-					e.preventDefault();
-					
-					var urlval = url.value;
-					
-					if(urlval){
-					
-						if(urlval.substring(0,7) !== 'http://' && urlval.substring(0,8) !== 'https://'){
-							urlval = 'http://' + urlval;
-						}
-					
-						localStorage.setItem('url', urlval);
-					
-						document.location = urlval;
-					
-					}
-					
-					
-				}
-			
-			}
-		
-		</script>
 	
 	</head>
 	
 	<body>
-	<div class="wrapper">
-	
-	<form id="loc">
-	<input placeholder="Enter URL" id="url" type="url" name="url" value=""/> <button>Go</button>
-	</form>
 	<img class="logo" src="file:///android_asset/www/clever.png"/>
-	</div>
 	</body>
 
 </html>

@@ -1,14 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearLayout1"
+    android:id="@+id/linearLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:orientation="vertical"
  >
 
+    <LinearLayout
+        android:id="@+id/navbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="horizontal"
+>
+  
+	    <EditText
+	        android:id="@+id/url"
+	        android:layout_width="0dip"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1.0"
+	        android:hint="http://"
+	        android:imeOptions="actionGo"
+	        android:inputType="textAutoComplete|textUri"
+	        android:lines="1"
+/>
+	    
+	    <Button
+	        android:id="@+id/go_button"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:focusable="false"
+	        android:text="@string/go_button" />
+	    
+    </LinearLayout>
 	<WebView
-	    android:id="@+id/webView1"
+	    android:id="@+id/webView"
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+	    android:layout_height="0dip"
+	    android:layout_weight="1.0"
 	/>
 
 </LinearLayout>
