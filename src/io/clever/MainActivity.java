@@ -1,6 +1,5 @@
 package io.clever;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -160,6 +159,7 @@ public class MainActivity extends Activity {
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
         webSettings.setSupportZoom(true);
+        webSettings.setUseWideViewPort(true);
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         webSettings.setPluginState(WebSettings.PluginState.ON);
         webSettings.setJavaScriptEnabled(true);
