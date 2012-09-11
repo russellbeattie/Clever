@@ -18,217 +18,208 @@ import android.widget.TextView.OnEditorActionListener;
 
 public class MainActivity extends Activity {
 
-	WebView webView;
-	EditText urlField;
-	Button goButton;
-	LinearLayout linearLayout, navbar;
-	Animation slideUp, slideDown;
+    WebView webView;
+    EditText urlField;
+    Button goButton;
+    LinearLayout linearLayout, navbar;
+    Animation slideUp, slideDown;
 
-	public static final String HOME_PAGE = "file:///android_asset/www/index.html";
-	public static final String PREFS_NAME = "CleverPrefs";
+    public static final String HOME_PAGE = "file:///android_asset/www/index.html";
+    public static final String PREFS_NAME = "CleverPrefs";
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
 
-		super.onCreate(savedInstanceState);
+	super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_main);
+	setContentView(R.layout.activity_main);
 
-		linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
-		linearLayout.setBackgroundColor(Color.BLACK);
+	linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
+	linearLayout.setBackgroundColor(Color.BLACK);
 
-		// Navbar setup
+	// Navbar setup
 
-		navbar = (LinearLayout) findViewById(R.id.navbar);
-		goButton = (Button) findViewById(R.id.go_button);
-		urlField = (EditText) findViewById(R.id.url);
+	navbar = (LinearLayout) findViewById(R.id.navbar);
+	goButton = (Button) findViewById(R.id.go_button);
+	urlField = (EditText) findViewById(R.id.url);
 
-		goButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				doNav();
-			}
-		});
+	goButton.setOnClickListener(new View.OnClickListener() {
+	    public void onClick(View v) {
+		doNav();
+	    }
+	});
 
-		urlField.setOnEditorActionListener(new OnEditorActionListener() {
-			@Override
-			public boolean onEditorAction(TextView v, int actionId,
-					KeyEvent event) {
-				boolean handled = false;
-				if (actionId == EditorInfo.IME_ACTION_GO) {
+	urlField.setOnEditorActionListener(new OnEditorActionListener() {
+	    @Override
+	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		boolean handled = false;
+		if (actionId == EditorInfo.IME_ACTION_GO) {
 
-					doNav();
+		    doNav();
 
-					handled = true;
-				}
-				return handled;
-			}
-		});
+		    handled = true;
+		}
+		return handled;
+	    }
+	});
 
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		String lastUrl = settings.getString("lastUrl", "");
+	SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	String lastUrl = settings.getString("lastUrl", "");
 
-		urlField.setText(lastUrl);
+	urlField.setText(lastUrl);
 
-		// Navbar animation settings
+	// Navbar animation settings
 
-		AnimationListener slideListener = new AnimationListener() {
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				if (animation.equals(slideUp)) {
-					navbar.setVisibility(View.GONE);
-				}
-			}
+	AnimationListener slideListener = new AnimationListener() {
+	    @Override
+	    public void onAnimationEnd(Animation animation) {
+		if (animation.equals(slideUp)) {
+		    navbar.setVisibility(View.GONE);
+		}
+	    }
 
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-			}
+	    @Override
+	    public void onAnimationRepeat(Animation animation) {
+	    }
 
-			@Override
-			public void onAnimationStart(Animation animation) {
-				if (animation.equals(slideDown)) {
-					navbar.setVisibility(View.VISIBLE);
-				}
-			}
-		};
+	    @Override
+	    public void onAnimationStart(Animation animation) {
+		if (animation.equals(slideDown)) {
+		    navbar.setVisibility(View.VISIBLE);
+		}
+	    }
+	};
 
-		slideUp = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-				0.0f, Animation.RELATIVE_TO_SELF, -1.0f);
-		slideUp.setDuration(500);
-		slideUp.setAnimationListener(slideListener);
+	slideUp = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -1.0f);
+	slideUp.setDuration(500);
+	slideUp.setAnimationListener(slideListener);
 
-		slideDown = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-				-1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-		slideDown.setDuration(500);
-		slideDown.setAnimationListener(slideListener);
+	slideDown = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+	slideDown.setDuration(500);
+	slideDown.setAnimationListener(slideListener);
 
-		// WebView setup
+	// WebView setup
 
-		webView = (WebView) findViewById(R.id.webView);
+	webView = (WebView) findViewById(R.id.webView);
 
-		WebSettings webSettings = webView.getSettings();
+	WebSettings webSettings = webView.getSettings();
 
-		webView.setWebChromeClient(new WebChromeClient());
+	webView.setWebChromeClient(new WebChromeClient());
 
-		webView.setWebViewClient(new WebViewClient() {
+	webView.setWebViewClient(new WebViewClient() {
 
-			@Override
-			public void onPageFinished(WebView view, String url) {
+	    @Override
+	    public void onPageFinished(WebView view, String url) {
 
-				Log.d("scale", view.getScale() + "");
+		Log.d("scale", view.getScale() + "");
 
-				Log.d("pageFinished", url);
-				
-				view.setInitialScale(70);
-				
-				if (url.equalsIgnoreCase(HOME_PAGE)) {
-					// navbar.setVisibility(View.VISIBLE);
-					navbar.startAnimation(slideDown);
-				}
+		Log.d("pageFinished", url);
 
-			}
+		view.setInitialScale(70);
 
-			@Override
-			public void onScaleChanged(WebView view, float oldScale,
-					float newScale) {
-
-				Log.d("scale changed", oldScale + " - " + newScale);
-
-				if (newScale > 0.7) {
-
-					Log.d("scale", "reset");
-					// view.setInitialScale(70);
-
-				}
-
-			}
-
-		});
-
-		webView.setInitialScale(70);
-
-		webView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-		webView.setVerticalScrollBarEnabled(false);
-		webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-		webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
-
-		webSettings.setBuiltInZoomControls(true);
-		webSettings.setDisplayZoomControls(false);
-		
-		webSettings.setSupportZoom(true);
-		
-		webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-		webSettings.setPluginState(WebSettings.PluginState.ON);
-		webSettings.setJavaScriptEnabled(true);
-		webSettings.setDomStorageEnabled(true);
-		webSettings.setDatabaseEnabled(true);
-		webSettings.setDatabasePath("/data/data/"
-				+ webView.getContext().getPackageName() + "/databases/");
-		webSettings.setSaveFormData(false);
-		webSettings.setLightTouchEnabled(false);
-		webSettings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
-		webSettings.setRenderPriority(RenderPriority.HIGH);
-		webSettings
-				.setUserAgentString("Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.77 Large Screen Safari/534.24 GoogleTV");
-
-		final Intent intent = getIntent();
-		if ((intent.getAction() == Intent.ACTION_VIEW)
-				&& (intent.getData() != null)) {
-			final String url = intent.getDataString();
-			urlField.setText(url);
-			webView.loadUrl(url);
-			navbar.setVisibility(View.GONE);
-		} else {
-			webView.loadUrl(HOME_PAGE);
+		if (url.equalsIgnoreCase(HOME_PAGE)) {
+		    // navbar.setVisibility(View.VISIBLE);
+		    navbar.startAnimation(slideDown);
 		}
 
-		webView.requestFocus();
-	}
+	    }
 
-	@Override
-	protected void onStop() {
+	    @Override
+	    public void onScaleChanged(WebView view, float oldScale, float newScale) {
 
-		super.onStop();
+		Log.d("scale changed", oldScale + " - " + newScale);
 
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putString("lastUrl", urlField.getText().toString());
+		if (newScale > 0.7) {
 
-		editor.commit();
-
-	}
-
-	@Override
-	public void onBackPressed() {
-		if (webView.canGoBack()) {
-
-			webView.goBack();
-			webView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-
-		} else {
-
-			super.onBackPressed();
+		    Log.d("scale", "reset");
+		    // view.setInitialScale(70);
 
 		}
+
+	    }
+
+	});
+
+	webView.setInitialScale(70);
+
+	webView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+	webView.setVerticalScrollBarEnabled(false);
+	webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+	webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
+
+	webSettings.setBuiltInZoomControls(true);
+	webSettings.setDisplayZoomControls(false);
+
+	webSettings.setSupportZoom(true);
+
+	webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+	webSettings.setPluginState(WebSettings.PluginState.ON);
+	webSettings.setJavaScriptEnabled(true);
+	webSettings.setDomStorageEnabled(true);
+	webSettings.setDatabaseEnabled(true);
+	webSettings.setDatabasePath("/data/data/" + webView.getContext().getPackageName() + "/databases/");
+	webSettings.setSaveFormData(false);
+	webSettings.setLightTouchEnabled(false);
+	webSettings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
+	webSettings.setRenderPriority(RenderPriority.HIGH);
+	webSettings.setUserAgentString("Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.77 Large Screen Safari/534.24 GoogleTV");
+
+	final Intent intent = getIntent();
+	if ((intent.getAction() == Intent.ACTION_VIEW) && (intent.getData() != null)) {
+	    final String url = intent.getDataString();
+	    urlField.setText(url);
+	    webView.loadUrl(url);
+	    navbar.setVisibility(View.GONE);
+	} else {
+	    webView.loadUrl(HOME_PAGE);
 	}
 
-	public void doNav() {
+	webView.requestFocus();
+    }
 
-		String url = urlField.getText().toString();
+    @Override
+    protected void onStop() {
 
-		if (URLUtil.isValidUrl(url) == false) {
-			url = "http://" + url;
-		}
+	super.onStop();
 
-		urlField.setText(url);
+	SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	SharedPreferences.Editor editor = settings.edit();
+	editor.putString("lastUrl", urlField.getText().toString());
 
-		webView.requestFocus();
+	editor.commit();
 
-		webView.loadUrl(url);
+    }
 
-		navbar.startAnimation(slideUp);
+    @Override
+    public void onBackPressed() {
+	if (webView.canGoBack()) {
+
+	    webView.goBack();
+	    webView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+
+	} else {
+
+	    super.onBackPressed();
 
 	}
+    }
+
+    public void doNav() {
+
+	String url = urlField.getText().toString();
+
+	if (URLUtil.isValidUrl(url) == false) {
+	    url = "http://" + url;
+	}
+
+	urlField.setText(url);
+
+	webView.requestFocus();
+
+	webView.loadUrl(url);
+
+	navbar.startAnimation(slideUp);
+
+    }
 
 }
