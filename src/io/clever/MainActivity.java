@@ -119,7 +119,9 @@ public class MainActivity extends Activity {
 				Log.d("scale", view.getScale() + "");
 
 				Log.d("pageFinished", url);
-
+				
+				view.setInitialScale(70);
+				
 				if (url.equalsIgnoreCase(HOME_PAGE)) {
 					// navbar.setVisibility(View.VISIBLE);
 					navbar.startAnimation(slideDown);
@@ -151,8 +153,11 @@ public class MainActivity extends Activity {
 		webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 		webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
 
-		webSettings.setBuiltInZoomControls(false);
-		webSettings.setSupportZoom(false);
+		webSettings.setBuiltInZoomControls(true);
+		webSettings.setDisplayZoomControls(false);
+		
+		webSettings.setSupportZoom(true);
+		
 		webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 		webSettings.setPluginState(WebSettings.PluginState.ON);
 		webSettings.setJavaScriptEnabled(true);
