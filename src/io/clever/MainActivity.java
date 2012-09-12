@@ -1,5 +1,6 @@
 package io.clever;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.animation.*;
 import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.EditorInfo;
@@ -40,6 +42,8 @@ public class MainActivity extends Activity {
 	// Navbar setup
 
 	navbar = (LinearLayout) findViewById(R.id.navbar);
+	navbar.setBackgroundColor(Color.GRAY);
+	
 	goButton = (Button) findViewById(R.id.go_button);
 	urlField = (EditText) findViewById(R.id.url);
 
@@ -104,7 +108,19 @@ public class MainActivity extends Activity {
 
 	WebSettings webSettings = webView.getSettings();
 
-	webView.setWebChromeClient(new WebChromeClient());
+	webView.setWebChromeClient(new WebChromeClient(){
+	
+	    @Override
+	    public void onShowCustomView(View view, CustomViewCallback callback) {
+	        
+		Log.d("video", "onShowCustomView ");
+	        
+	        super.onShowCustomView(view, callback);
+	        
+	    }
+	
+	
+	});
 
 	webView.setWebViewClient(new WebViewClient() {
 
@@ -115,11 +131,15 @@ public class MainActivity extends Activity {
 
 		Log.d("pageFinished", url);
 
+		
+
 		view.setInitialScale(70);
 
 		if (url.equalsIgnoreCase(HOME_PAGE)) {
 		    // navbar.setVisibility(View.VISIBLE);
 		    navbar.startAnimation(slideDown);
+		} else {
+		    urlField.setText(url);
 		}
 
 	    }
@@ -138,7 +158,32 @@ public class MainActivity extends Activity {
 
 	    }
 
+
+	    @Override
+	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+		Log.d("shouldOverrideUrlLoading", url);
+		
+		view.setInitialScale(70);
+		
+		return false;
+		
+		//return super.shouldOverrideUrlLoading(view, url);
+	    }
+	    
+	    
+
 	});
+	
+	webView.setOnLongClickListener(new OnLongClickListener() {
+	    @Override
+	    public boolean onLongClick(View view) {
+	        
+		navbar.startAnimation(slideDown);
+	        
+	        return true;
+	    }
+	});
+	
 
 	webView.setInitialScale(70);
 
@@ -158,7 +203,7 @@ public class MainActivity extends Activity {
 	webSettings.setDomStorageEnabled(true);
 	webSettings.setDatabaseEnabled(true);
 	webSettings.setDatabasePath("/data/data/" + webView.getContext().getPackageName() + "/databases/");
-	webSettings.setSaveFormData(false);
+	//webSettings.setSaveFormData(false);
 	webSettings.setLightTouchEnabled(false);
 	webSettings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
 	webSettings.setRenderPriority(RenderPriority.HIGH);
@@ -203,6 +248,7 @@ public class MainActivity extends Activity {
 
 	}
     }
+    
 
     public void doNav() {
 
@@ -219,6 +265,8 @@ public class MainActivity extends Activity {
 	webView.loadUrl(url);
 
 	navbar.startAnimation(slideUp);
+	
+	Toast.makeText(getApplicationContext(), "Press and hold to display the URL bar again", Toast.LENGTH_SHORT).show();
 
     }
 

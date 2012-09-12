@@ -11,25 +11,29 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
-        android:orientation="horizontal"
->
+        android:background="#CCC"
+        android:orientation="horizontal" 
+        android:paddingTop="4dip"
+        >
   
 	    <EditText
 	        android:id="@+id/url"
 	        android:layout_width="0dip"
-	        android:layout_height="wrap_content"
+	        android:layout_height="match_parent"
+	        android:layout_gravity="center"
+	        android:layout_marginLeft="2dp"
 	        android:layout_weight="1.0"
-	        android:hint="http://"
+	        android:hint="@string/nav_text"
 	        android:imeOptions="actionGo"
 	        android:inputType="textAutoComplete|textUri"
-	        android:lines="1"
-/>
+	        android:lines="1" />
 	    
 	    <Button
 	        android:id="@+id/go_button"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center"
+	        android:layout_weight="0.07"
 	        android:focusable="false"
 	        android:text="@string/go_button" />
 	    

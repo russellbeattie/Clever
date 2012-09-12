@@ -4,6 +4,7 @@
     <string name="title_activity_main">Clever</string>
     
 	<string name="go_button">Go</string>
+	<string name="nav_text">Enter URL</string>
     
     
 </resources>
