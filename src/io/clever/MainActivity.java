@@ -1,15 +1,17 @@
 package io.clever;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
 import android.view.animation.*;
 import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.EditorInfo;
@@ -17,6 +19,8 @@ import android.webkit.*;
 import android.webkit.WebSettings.*;
 import android.widget.*;
 import android.widget.TextView.OnEditorActionListener;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.*;
 
 public class MainActivity extends Activity {
 
@@ -43,7 +47,7 @@ public class MainActivity extends Activity {
 
 	navbar = (LinearLayout) findViewById(R.id.navbar);
 	navbar.setBackgroundColor(Color.GRAY);
-	
+
 	goButton = (Button) findViewById(R.id.go_button);
 	urlField = (EditText) findViewById(R.id.url);
 
@@ -108,38 +112,26 @@ public class MainActivity extends Activity {
 
 	WebSettings webSettings = webView.getSettings();
 
-	webView.setWebChromeClient(new WebChromeClient(){
-	
-	    @Override
-	    public void onShowCustomView(View view, CustomViewCallback callback) {
-	        
-		Log.d("video", "onShowCustomView ");
-	        
-	        super.onShowCustomView(view, callback);
-	        
-	    }
-	
-	
-	});
+	webView.setWebChromeClient(new MyWebChromeClient());
 
 	webView.setWebViewClient(new WebViewClient() {
 
 	    @Override
 	    public void onPageFinished(WebView view, String url) {
 
-		Log.d("scale", view.getScale() + "");
+		//Log.d("scale", view.getScale() + "");
 
-		Log.d("pageFinished", url);
+		//Log.d("pageFinished", url);
 
-		
-
-		view.setInitialScale(70);
+		if(view.getScale() > 0.7){
+		    	Log.d("scale reset", "");
+			view.setInitialScale(70);
+		}
 
 		if (url.equalsIgnoreCase(HOME_PAGE)) {
-		    // navbar.setVisibility(View.VISIBLE);
 		    navbar.startAnimation(slideDown);
 		} else {
-		    urlField.setText(url);
+		    urlField.setText(url); 
 		}
 
 	    }
@@ -149,41 +141,33 @@ public class MainActivity extends Activity {
 
 		Log.d("scale changed", oldScale + " - " + newScale);
 
-		if (newScale > 0.7) {
-
-		    Log.d("scale", "reset");
-		    // view.setInitialScale(70);
-
-		}
-
 	    }
-
 
 	    @Override
 	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-		Log.d("shouldOverrideUrlLoading", url);
-		
-		view.setInitialScale(70);
-		
-		return false;
-		
-		//return super.shouldOverrideUrlLoading(view, url);
+		Log.d("Loading URL", url);
+
+		if(view.getScale() > 0.7){
+		    	Log.d("scale reset", "");
+			view.setInitialScale(70);
+		}
+
+		return super.shouldOverrideUrlLoading(view, url);
 	    }
-	    
-	    
 
 	});
 	
+
+
 	webView.setOnLongClickListener(new OnLongClickListener() {
 	    @Override
 	    public boolean onLongClick(View view) {
-	        
+
 		navbar.startAnimation(slideDown);
-	        
-	        return true;
+
+		return true;
 	    }
 	});
-	
 
 	webView.setInitialScale(70);
 
@@ -203,7 +187,7 @@ public class MainActivity extends Activity {
 	webSettings.setDomStorageEnabled(true);
 	webSettings.setDatabaseEnabled(true);
 	webSettings.setDatabasePath("/data/data/" + webView.getContext().getPackageName() + "/databases/");
-	//webSettings.setSaveFormData(false);
+	// webSettings.setSaveFormData(false);
 	webSettings.setLightTouchEnabled(false);
 	webSettings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
 	webSettings.setRenderPriority(RenderPriority.HIGH);
@@ -248,8 +232,8 @@ public class MainActivity extends Activity {
 
 	}
     }
-    
 
+    
     public void doNav() {
 
 	String url = urlField.getText().toString();
@@ -265,9 +249,44 @@ public class MainActivity extends Activity {
 	webView.loadUrl(url);
 
 	navbar.startAnimation(slideUp);
-	
-	Toast.makeText(getApplicationContext(), "Press and hold to display the URL bar again", Toast.LENGTH_SHORT).show();
 
+	Toast.makeText(getApplicationContext(), "Press and hold to display the URL bar.", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private class MyWebChromeClient extends WebChromeClient implements OnCompletionListener, OnErrorListener, OnPreparedListener {
+
+	public void onProgressChanged(WebView view, int newProgress) {
+	    if (newProgress == 100) {
+		view.loadUrl("javascript:var vids = document.getElementsByTagName('video'); if(vids.length > 0){ vids[0].play();}");
+	    }
+
+	}
+
+	public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
+	    Log.d("onShowCustomView", "");
+	}
+
+	public void onPrepared(MediaPlayer mp) {
+	    Log.d("onPrepared", "");
+	}
+
+	public void onCompletion(MediaPlayer mp) {
+	    Log.d("onCompletion", "");
+	}
+
+	public boolean onError(MediaPlayer mp, int what, int extra) {
+	    Log.d("onError", what + "");
+
+	    return false;
+	}
+
+	public boolean onConsoleMessage(ConsoleMessage cm) {
+
+	    // Log.d("onConsoleMessage", cm.message());
+	    return true;
+
+	}
     }
 
 }
